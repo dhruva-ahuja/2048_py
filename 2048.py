@@ -5,7 +5,7 @@ DOWN = 's'
 LEFT = 'a'
 RIGHT = 'd'
 EXIT = 'exit'
-
+BLANK = '_'
 
 def printGrid(A, m, n):
     for i in range(m):
@@ -37,8 +37,10 @@ def playmove(A, m, n, move):
         # Write something here
         print()
     elif move == DOWN:
-        # Write something here
-        print()
+        for j in range(n):
+            for i in range(m-1, 0, -1):
+                print('{} {}'.format(i, j))
+        
     elif move == RIGHT:
         # Write something here
         print()
