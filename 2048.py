@@ -1,10 +1,11 @@
 from random import randrange
 
 UP = 'w'
-DOWN = 's'
+DOWN = 's'      
 LEFT = 'a'
 RIGHT = 'd'
 EXIT = 'exit'
+BLANK = '_'
 
 
 def printGrid(A, m, n):
@@ -34,16 +35,52 @@ def generateRandom(A, m, n):
 
 def playmove(A, m, n, move):
     if move == UP:
-        # Write something here
+        for j in range(m):
+            for i in range(n-1,-1,-1):
+                if A[i][j] != BLANK and A[i-1][j] == BLANK:
+                    A[i-1][j],A[i][j] = A[i][j],BLANK
+
+
         print()
+        
     elif move == DOWN:
-        # Write something here
+        
+
+
         print()
     elif move == RIGHT:
+        for i in range(m):
+            for j in range(n):
+                if A[i][j] == BLANK:
+                    A[i].pop(j)
+                    A[i].insert(0,BLANK)
+            for j in range(n-2,-1,-1):        
+                if A[i][j] == A[i][j+1]and A[i][j] != BLANK:
+                    A[i][j+1]  =  2*A[i][j+1]
+                    A[i][j] = BLANK
+            for j in range(n):
+                if A[i][j] == BLANK:
+                    A[i].pop(j)
+                    A[i].insert(0,BLANK)        
+                
+                   
         # Write something here
         print()
     elif move == LEFT:
-        # Write something here
+        for i in range(m):
+            for j in range(n-1,-1,-1):
+                if A[i][j] == BLANK:
+                    A[i].remove(BLANK)
+                    A[i].append(BLANK)
+            for j in range(1,n):
+                if A[i][j] == A[i][j-1]and A[i][j] != BLANK:
+                    A[i][j-1]  =  2*A[i][j]
+                    A[i][j] = BLANK
+            for j in range(n-1,-1,-1):
+                if A[i][j] == BLANK:
+                    A[i].remove(BLANK)
+                    A[i].append(BLANK)        
+                    
         print()
     elif move == EXIT:
         quit()
@@ -73,3 +110,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+print('Game over')
