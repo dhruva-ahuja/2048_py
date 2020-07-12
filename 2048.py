@@ -1,6 +1,9 @@
 from random import randrange
 import numpy as np
 
+import helper
+import gameplay
+
 UP = 'w'
 DOWN = 's'
 LEFT = 'a'
@@ -9,14 +12,6 @@ EXIT = 'exit'
 BLANK = 0
 BLANK_REPR = '_'
 
-def printGrid(A, m, n):
-    for i in range(m):
-        for j in range(n):
-            symbol = A[i][j]
-            if symbol == BLANK:
-                symbol = BLANK_REPR
-            print(symbol, end='|')
-        print()
 
 def getEmptySlots(A, m, n):
     empty = []
@@ -49,62 +44,13 @@ def moveblanksforward(row, n):
         moved = True
     return moved
 
-def rightshift(row, n):
-    legalmove = False
-    legalmove |= moveblanksforward(row, n)
-    #operate
-    i = n-2
-    while i >= 0:
-        if row[n-i-1] == BLANK:
-            row[n-i-1] = row[n-i-2]
-            row[n-i-2] = BLANK
-            legalmove = True
-            i-=2
-        elif row[n-i-1] == row[n-i-2]:
-            row[n-i-1] = 2*row[n-i-2]
-            row[n-i-2] = BLANK
-            legalmove = True
-            i-=2
-        else:
-            i-=1
-    legalmove |= moveblanksforward(row, n)
-    return legalmove
-def playsucessfulmove(A, m, n, move):
-    legalmove = False
-    if move == UP:
-        A = np.transpose(np.flip(A, axis=0))
-        for i in range(n):
-            legalmove |= rightshift(A[i], m)
-        A = np.flip(np.transpose(A), axis=0)
-    elif move == DOWN:
-        A = np.transpose(A)
-        for i in range(n):
-            legalmove |= rightshift(A[i], m)
-        A = np.transpose(A)
-        print()
-    elif move == RIGHT:
-        for i in range(m):
-            legalmove |= rightshift(A[i], n)
-        print()
-    elif move == LEFT:
-        A = np.flip(A, axis=1)
-        for i in range(m):
-            legalmove |= rightshift(A[i], n)
-        A = np.flip(A, axis=1)
-        print()
-    elif move == EXIT:
-        quit()
-    else:
-        print('Illegal move!')
-    return legalmove
 
-
-def gamePlay(A, m, n):
+def play(A, m, n):
     while generateRandom(A, m, n):
-        printGrid(A, m, n)
+        helper.printGrid(A, m, n)
         move = input()
-        while not playsucessfulmove(A, m, n, move):
-            printGrid(A, m, n)
+        while not gameplay.playsucessfulmove(A, m, n, move):
+            helper.printGrid(A, m, n)
             move = input()
     
 
@@ -119,7 +65,7 @@ def main():
         print('Invalid input')
     
     grid = np.array([[BLANK for i in range(N)] for i in range(N)])
-    gamePlay(grid, N, N)
+    play(grid, N, N)
 
 if __name__ == '__main__':
     main()
