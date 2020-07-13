@@ -27,20 +27,17 @@ def rightshift(row, n):
     legalmove = False
     legalmove |= moveblanksforward(row, n)
     #operate
-    i = n-2
-    while i >= 0:
-        if row[n-i-1] == BLANK:
-            row[n-i-1] = row[n-i-2]
-            row[n-i-2] = BLANK
-            legalmove = True
-            i -= 2
-        elif row[n-i-1] == row[n-i-2]:
-            row[n-i-1] = 2*row[n-i-2]
-            row[n-i-2] = BLANK
-            legalmove = True
-            i -= 2
-        else:
-            i -= 1
+    i = n-1
+    while i > 0:
+        if row[i] == BLANK:
+            row[i] = row[i-1]
+            row[i-1] = BLANK
+            legalmove |= moveblanksforward(row, n) 
+        elif row[i] == row[i-1]:
+            row[i] = 2*row[i]
+            row[i-1] = BLANK
+            legalmove |= moveblanksforward(row, n) 
+        i -= 1
     legalmove |= moveblanksforward(row, n)
     return legalmove
 
