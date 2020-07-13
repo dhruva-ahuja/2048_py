@@ -1,23 +1,23 @@
 from random import randrange
+import numpy as np
+
+import helper
+import gameplay
 
 UP = 'w'
 DOWN = 's'
 LEFT = 'a'
 RIGHT = 'd'
 EXIT = 'exit'
-BLANK = '_'
+BLANK = 0
+BLANK_REPR = '_'
 
-def printGrid(A, m, n):
-    for i in range(m):
-        for j in range(n):
-            print(A[i][j], end='|')
-        print()
 
 def getEmptySlots(A, m, n):
     empty = []
     for i in range(m):
         for j in range(n):
-            if A[i][j] == '_':
+            if A[i][j] == BLANK:
                 empty.append([i, j])
     return empty
 
@@ -31,33 +31,27 @@ def generateRandom(A, m, n):
     A[emptySlots[newIndex][0]][emptySlots[newIndex][1]] = newNumber
     return True
 
-
-def playmove(A, m, n, move):
-    if move == UP:
-        # Write something here
-        print()
-    elif move == DOWN:
-        for j in range(n):
-            for i in range(m-1, 0, -1):
-                print('{} {}'.format(i, j))
-        
-    elif move == RIGHT:
-        # Write something here
-        print()
-    elif move == LEFT:
-        # Write something here
-        print()
-    elif move == EXIT:
-        quit()
-    else:
-        print('Illegal move!')
+def moveblanksforward(row, n):
+    moved = False
+    # move all blanks forward
+    writeIndex = n-1
+    for i in range(n):
+        if row[n-1-i] != BLANK:
+            row[writeIndex] = row[n-1-i]
+            writeIndex -= 1
+    for i in range(writeIndex+1):
+        row[i] = BLANK
+        moved = True
+    return moved
 
 
-def gamePlay(A, m, n):
+def play(A, m, n):
     while generateRandom(A, m, n):
-        printGrid(A, m, n)
+        helper.printGrid(A, m, n)
         move = input()
-        playmove(A, m, n, move)
+        while not gameplay.playsucessfulmove(A, m, n, move):
+            helper.printGrid(A, m, n)
+            move = input()
     
 
 def main():
@@ -70,8 +64,8 @@ def main():
     else:
         print('Invalid input')
     
-    grid = [['_' for i in range(N)] for i in range(N)]
-    gamePlay(grid, N, N)
+    grid = np.array([[BLANK for i in range(N)] for i in range(N)])
+    play(grid, N, N)
 
 if __name__ == '__main__':
     main()
